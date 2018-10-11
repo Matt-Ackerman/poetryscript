@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: matt
+Build-Jdk: 11
+Implementation-Title: gs-serving-web-content
+Implementation-Version: 0.1.0
+Implementation-Vendor-Id: org.springframework
+Implementation-Vendor: Pivotal Software, Inc.
+Created-By: Maven Integration for Eclipse
+

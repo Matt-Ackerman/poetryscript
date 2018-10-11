@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+<html xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-126626890-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-126626890-1');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" type="image/x-icon" href="https://chatham.ces.ncsu.edu/wp-content/uploads/2016/11/large_autumn-leaves-456.png">
+<link href="/style.css" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet">
+<link rel="stylesheet"href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/app.js"></script>
+	<script>
+	
+	function setCookie(name,value,days) {
+	    var expires = "";
+	    if (days) {
+	        var date = new Date();
+	        date.setTime(date.getTime() + (days*24*60*60*1000));
+	        expires = "; expires=" + date.toUTCString();
+	    }
+	    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+	}
+	function getCookie(name) {
+	    var nameEQ = name + "=";
+	    var ca = document.cookie.split(';');
+	    for(var i=0;i < ca.length;i++) {
+	        var c = ca[i];
+	        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+	        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	    }
+	    return null;
+	}
+	
+	var wordToRhyme = [];
+	var i = 0;
+	
+	var poemRoundNumber = 0;
+	
+	var firstTimeUser;
+
+	// When the page is opened
+	$(document).ready(function() {
+		
+		// See if its the user's first time on website, if it is, open up the 'about' tab.
+		var x = getCookie('cookie');
+		if (!x) {
+			document.getElementById('getinfo').style.color = "white";
+ 			document.getElementById('info-bar').innerHTML = "the poetryscript project scans from among " +
+				"<a href='\https://www.gutenberg.org\'>gutenberg.org</a>'s 57,000 novels to produce randomly-generated 8-line poems that follow " + 
+				"conventional sonnet standards. <b>Each sonnet is unique and will never be recreated by you or anyone else.</b>";
+			$("#info-bar").slideDown("slow");
+			firstTimeUser = true;
+        	barIsShowing = true;
+        	barIsShowingAbout = true;
+		    setCookie('cookie','cookie', 182);
+		}
+
+		// When you click the get poem button
+		$('#getPoem').on('click touchstart', function() {
+			
+			document.getElementById('getPoem').style.backgroundColor = "#eca54a";
+			
+	        for (var n = 0; n < 8; n++) {
+	        	document.getElementById('sentence' + n).innerHTML = "";
+	        	document.getElementById('title' + n).innerHTML = "";
+	        }
+	        
+	        i = 0;
+	        wordToRhyme = [];
+	        poemRoundNumber++;
+
+			// Trigger the spring boot controller and go to display() function with result
+			$.ajax({
+				url : "get-poem.html",
+				data : {
+					'sentence' : null,
+					'poemRoundNumber' : poemRoundNumber
+				},
+				success : function(data) {
+					addLineToTable(data);
+				}
+			});
+
+		});
+		
+
+		var barIsShowing = false;
+ 		var barIsShowingAbout = false;
+ 		
+ 		$('#getinfo').on('click', function() {
+ 			document.getElementById('info-bar').innerHTML = "the poetryscript project scans from among " +
+ 				"<a href='\https://www.gutenberg.org\'>gutenberg.org</a>'s 57,000 novels to produce randomly-generated 8-line poems that follow " + 
+ 				"conventional sonnet standards. <b>Each sonnet is unique and will never be recreated by you or anyone else.</b>";
+	        if (barIsShowing) {
+	        	if (barIsShowingAbout) {
+	        		$("#info-bar").slideUp('slow');
+	        		document.getElementById('getinfo').style.color = "black";
+		        	barIsShowing = false;
+		        	barIsShowingAbout = false;
+	        	} else {
+	        		document.getElementById('getinfo').style.color = "white";
+	        		document.getElementById('getcontact').style.color = "black";
+	        		barIsShowing = true;
+	        		barIsShowingAbout = true;
+	        	}
+	        } else {
+	        	$("#info-bar").slideDown("slow");
+	        	document.getElementById('getinfo').style.color = "white";
+	        	barIsShowing = true;
+	        	barIsShowingAbout = true;
+	        }
+		});
+		
+		$('#getcontact').on('click', function() {
+			document.getElementById('info-bar').innerHTML = "poetryscript.project@gmail.com";
+	        if (barIsShowing) {
+	        	if (barIsShowingAbout) {
+	        		document.getElementById('getcontact').style.color = "white";
+	        		document.getElementById('getinfo').style.color = "black";
+		        	barIsShowingAbout = false;
+	        	} else {
+	        		$("#info-bar").slideUp('slow');
+	        		document.getElementById('getcontact').style.color = "black";
+		        	barIsShowing = false;
+		        	barIsShowingAbout = false;
+	        	}
+	        } else {
+	        	$("#info-bar").slideDown('slow');
+	        	document.getElementById('getcontact').style.color = "white";
+	        	barIsShowing = true;
+	        	barIsShowingAbout = false;
+	        }
+		});
+		
+	});
+	
+	
+	// This is triggered by response from spring boot
+	function addLineToTable(data) {
+		
+		document.getElementById('getPoem').style.backgroundColor = "#e5e5e5";
+
+		var json = JSON.parse(data);
+		
+		if (json.poemRoundNumber != poemRoundNumber) {
+			return false;
+		}
+		
+		wordToRhyme[i] = json.sentence;
+
+		document.getElementById('title' + i).innerHTML = json.title + ' - ' + json.author;
+		
+		// if its a first time user, the 'about' tab is open so close it now.
+		if (firstTimeUser) {
+			$("#info-bar").slideUp("slow");
+			firstTimeUser = false;
+		}
+
+		if (i == 7) {
+			document.getElementById('sentence' + i).innerHTML = json.sentence + ".";
+			return false;
+		} else {
+			document.getElementById('sentence' + i).innerHTML = json.sentence + ',';
+		}
+		
+		i++;
+		
+		if (i == 2 || i == 3 || i == 6 || i == 7) {
+			$.ajax({
+				url : "get-poem.html",
+				data : {
+					'sentence' : wordToRhyme[i-2],
+					'poemRoundNumber' : poemRoundNumber
+				},
+				success : function(data) {
+					addLineToTable(data);
+				}
+			});
+		} else {
+			$.ajax({
+				url : "get-poem.html",
+				data : {
+					'sentence' : null,
+					'poemRoundNumber' : poemRoundNumber
+				},
+				success : function(data) {
+					addLineToTable(data);
+				}
+			});
+		}
+
+	}
+</script>
+	
+</head>
+<body>
+
+	<div id=top-bar>
+		<ul>
+			<li><button id="getinfo" type="submit">about</button></li>
+			<li><button id="getcontact" type="submit">contact</button></li>
+		</ul>
+	</div>
+
+	<div id="info-bar"></div>
+
+		<div id="header">
+			<img src=https://chatham.ces.ncsu.edu/wp-content/uploads/2016/11/large_autumn-leaves-456.png
+				width="10%" height="13%">poetryscript</div>
+
+		<div id="header2">discover beauty through chance.</div>
+	
+	<div class="buttons">
+		<button class="btn btn-green btn-border-rev" id="getPoem" type="submit" style="font-size : 1.5vw;">discover</button>
+	</div>
+
+
+	<div class="center-lists">
+		<div class="bothlists">
+			<div class="list">
+				<div id="sentence">
+					<ul>
+						<li><div id="sentence0"></div></li>
+						<li><div id="sentence1"></div></li>
+						<li><div id="sentence2"></div></li>
+						<li><div id="sentence3"></div></li>
+						<li><div id="sentence4"></div></li>
+						<li><div id="sentence5"></div></li>
+						<li><div id="sentence6"></div></li>
+						<li><div id="sentence7"></div></li>
+					</ul>
+				</div>
+			</div>
+			<div class="list">
+				<div id="titleAndAuthor">
+					<ul>
+						<li class="extraspace"><div id="title0"></div></li>
+						<li class="extraspace"><div id="title1"></div></li>
+						<li class="extraspace"><div id="title2"></div></li>
+						<li class="extraspace"><div id="title3"></div></li>
+						<li class="extraspace"><div id="title4"></div></li>
+						<li class="extraspace"><div id="title5"></div></li>
+						<li class="extraspace"><div id="title6"></div></li>
+						<li class="extraspace"><div id="title7"></div></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

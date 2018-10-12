@@ -22,52 +22,15 @@ public class RandomSentence {
 		
 		// Find the random sentence
 		findRandomSentence(bookUtility.getRandomBook());
-		
-		// If the sentence doesn't match criteria, keep searching until you get one
-		while (!sentenceUtility.checkIfSentenceMatchesCriteria(sentence, true)) {
-			findRandomSentence(bookUtility.getRandomBook());
-		}
 	}
 	
     public void findRandomSentence(Book book) throws IOException {
-    	String bookText = book.getText();
-    	String sentence = "";
-    	
-    	// Checks length, checks if it contains digits, etc.
-    	while ((sentence.length() < 25 || sentence.length() > 50) ||
-    			sentence.contains("CHAPTER") ||
-    			sentence.matches(".*\\d+.*")) {
-        	int startingPoint = randomizeStartingPoint(bookText);
-        	
-        	int firstCharIndex = bookText.indexOf(".", startingPoint);
-        	
-        	int a = bookText.indexOf(".", firstCharIndex + 1);
-        	int b = bookText.indexOf(",", firstCharIndex + 1);
-        	int c = bookText.indexOf("!", firstCharIndex + 1);
-        	int d = bookText.indexOf("?", firstCharIndex + 1);
-        	
-        	// Trim the sentence to the next . or , or ! or ?
-        	if (a > 0 && b > 0 && c > 0 && d > 0) {
-        		sentence = bookText.substring(firstCharIndex + 1, Math.min(Math.min(a,b), Math.min(c, d)));
-        	}
-        	else {
-        		sentence = bookText.substring(firstCharIndex + 1, a);
-        	}
-        	//System.out.println(". . . trying to add: " + cleanString(sentence));
-    	}
-
+    	String sentence = sentenceUtility.getARandomSentence(book);
     	this.sentence = cleanString(sentence);
     	this.authorOfBookSentenceIsFrom = book.getAuthor();
     	this.titleOfBookSentenceIsFrom = book.getTitle();
     }
-    
-    private int randomizeStartingPoint(String book) {
-    	Random rn = new Random();
-    	int bookLength = book.length() - 500;
-    	int range = bookLength;
-    	int randomNum =  rn.nextInt(range) + 0;
-    	return randomNum;
-    }
+  
     
     public String cleanString(String sentence) {
     	sentence = sentence.replace("\n", "");

@@ -2,6 +2,7 @@ package hello;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RhymingSentence {
 	
@@ -26,11 +27,6 @@ public class RhymingSentence {
 		 
 		 // find a rhyming sentence from a random book
 		 findRhymingSentence(bookUtility);
-		 
-		 // If the sentence doesn't match criteria, keep searching until you get one
-		 while (!sentenceUtility.checkIfSentenceMatchesCriteria(sentence, true)) {
-			 findRhymingSentence(bookUtility);
-		 }
 	}
 	
     public void findRhymingSentence(BookUtility bookUtility) throws IOException {
@@ -39,23 +35,11 @@ public class RhymingSentence {
     			sentenceUtility.getRhymingWordsForSentence(sentenceToRhymeOffOf);
     	
     	// create a random new sentence
-    	RandomSentence newSentence = new RandomSentence(bookUtility);
-    	String newSentenceString = newSentence.getSentence();
+    	List<String> result = sentenceUtility.getARhymingSentence(bookUtility, wordsThatRhymeWithSentence);
 		
-    	// get the last word from the random new sentence
-        String lastWordFromNewSentence = sentenceUtility.getLastWordOfSentence(newSentenceString);
-        
-        // keep getting a random new sentence until its last word is a rhyming word
-        while (!wordsThatRhymeWithSentence.contains(lastWordFromNewSentence)) {
-        	newSentence.findRandomSentence(bookUtility.getRandomBook());
-        	newSentenceString = newSentence.getSentence();
-        	
-            lastWordFromNewSentence = sentenceUtility.getLastWordOfSentence(newSentenceString);
-        }
-        
-        this.sentence = newSentenceString;
-        this.authorOfBookSentenceIsFrom = newSentence.getAuthorOfBookSentenceIsFrom();
-        this.titleOfBookSentenceIsFrom = newSentence.getTitleOfBookSentenceIsFrom();
+        this.sentence = result.get(0);
+    	this.titleOfBookSentenceIsFrom = result.get(1);
+    	this.authorOfBookSentenceIsFrom = result.get(2);
     }
     
     public String getSentence() {

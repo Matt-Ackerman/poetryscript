@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class BookUtility {
 	
-	private static final int BOOK_COUNT = 100;
+	private static final int BOOK_COUNT = 111;
 	
 	private ArrayList<Book> books;
 	
@@ -56,9 +56,11 @@ public class BookUtility {
 	        while ((line = br.readLine()) != null) {
 	        	if (i < 50) {
 		        	if (line.contains("Title:")) {
+		        		line = line.replace("�", "");
 		        		title.append(line).append(" \n");
 		        	}
 		        	else if (line.contains("Author:")) {
+		        		line = line.replace("�", "");
 		        		author.append(line).append(" \n");
 		        	}
 	        	}
@@ -71,6 +73,7 @@ public class BookUtility {
 	        bookData.put("title", title.substring(title.indexOf(":") + 2));
 	        bookData.put("text", text.toString());
 	        bookData.put("author", author.substring(author.indexOf(":") + 2));
+	        
 	    } catch (Exception e) {
 	    	System.err.println("!!!!!!!!!!!!!! ---------- bufferedreader failed on book " + bookNumber + ".txt");
 	    }

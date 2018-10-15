@@ -20,34 +20,14 @@ public class RandomSentence {
 		this.bookUtility = bookUtility;
 		sentenceUtility = new SentenceUtility();
 		
-		// Find the random sentence
 		findRandomSentence(bookUtility.getRandomBook());
 	}
 	
     public void findRandomSentence(Book book) throws IOException {
     	String sentence = sentenceUtility.getARandomSentence(book);
-    	this.sentence = cleanString(sentence);
+    	this.sentence = sentenceUtility.cleanString(sentence);
     	this.authorOfBookSentenceIsFrom = book.getAuthor();
     	this.titleOfBookSentenceIsFrom = book.getTitle();
-    }
-  
-    
-    public String cleanString(String sentence) {
-    	sentence = sentence.replace("\n", "");
-    	sentence = sentence.replace("\"", "");
-    	sentence = sentence.replace("“", "");
-    	sentence = sentence.replace("”", "");
-    	sentence = sentence.replace("(", "");
-    	sentence = sentence.replace(")", "");
-    	sentence = sentence.replace("_", "");
-    	sentence = sentence.replace("“", "\"");
-    	sentence = sentence.replace("”", "\"");
-    	sentence = sentence.replace("�", "");
-    	
-		if (!Character.isLetter(sentence.charAt(0))) {
-			sentence = sentence.substring(1, sentence.length());
-		}
-    	return sentence;
     }
     
     public String getSentence() {

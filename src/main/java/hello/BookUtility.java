@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class BookUtility {
 	
-	private static final int BOOK_COUNT = 111;
+	private static final int BOOK_COUNT = 142;
 	
 	private ArrayList<Book> books;
 	
@@ -32,7 +32,7 @@ public class BookUtility {
 		Class<GreetingController> clazz = GreetingController.class;
 		InputStream inputStream;
 		
-		for (int i = 1; i < BOOK_COUNT; i++)
+		for (int i = 1; i < BOOK_COUNT + 1; i++)
 		{
 			inputStream = clazz.getResourceAsStream(i + ".txt");
 			HashMap<String, String> bookInfo = readFromInputStream(inputStream, i);

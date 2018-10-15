@@ -18,11 +18,9 @@ public class SentenceUtility
 	}
 	
     public String getARandomSentence(Book book) {
-    	
     	String bookText = book.getText();
     	String sentence = "";
     	
-    	// Checks length, checks if it contains digits, etc.
     	try {
 			while (!checkIfSentenceMatchesCriteria(sentence, true)) {
 				sentence = getASentence(bookText);
@@ -35,12 +33,10 @@ public class SentenceUtility
     }
     
     public List<String> getARhymingSentence(BookUtility bookUtility, ArrayList<String> wordsThatRhymeWithSentence) {
-    	
     	String sentence = "";
     	Book book = bookUtility.getRandomBook();
     	List<String> result = new ArrayList<>();    
     	
-    	// Checks length, checks if it contains digits, etc.
     	try {
 			while (!checkIfSentenceMatchesCriteria(sentence, false) || !wordsThatRhymeWithSentence.contains(getLastWordOfSentence(sentence))) {
 		    	book = bookUtility.getRandomBook();
@@ -59,9 +55,7 @@ public class SentenceUtility
     
     public String getASentence(String bookText) {
     	String sentence = "";
-    	
 		int startingPoint = randomizeStartingPoint(bookText);
-		
 		int firstCharIndex = bookText.indexOf(".", startingPoint);
 		
 		int a = bookText.indexOf(".", firstCharIndex + 1);
@@ -124,6 +118,24 @@ public class SentenceUtility
     	}
     	
     	return true;
+    }
+    
+    public String cleanString(String sentence) {
+    	sentence = sentence.replace("\n", "");
+    	sentence = sentence.replace("\"", "");
+    	sentence = sentence.replace("“", "");
+    	sentence = sentence.replace("”", "");
+    	sentence = sentence.replace("(", "");
+    	sentence = sentence.replace(")", "");
+    	sentence = sentence.replace("_", "");
+    	sentence = sentence.replace("“", "\"");
+    	sentence = sentence.replace("”", "\"");
+    	sentence = sentence.replace("�", "");
+    	
+		if (!Character.isLetter(sentence.charAt(0))) {
+			sentence = sentence.substring(1, sentence.length());
+		}
+    	return sentence;
     }
     
     private int randomizeStartingPoint(String book) {

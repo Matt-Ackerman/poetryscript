@@ -37,7 +37,7 @@ public class RhymingSentence {
     	// create a random new sentence
     	List<String> result = sentenceUtility.getARhymingSentence(bookUtility, wordsThatRhymeWithSentence);
 		
-        this.sentence = result.get(0);
+        this.sentence = sentenceUtility.cleanString(result.get(0));
     	this.titleOfBookSentenceIsFrom = result.get(1);
     	this.authorOfBookSentenceIsFrom = result.get(2);
     }

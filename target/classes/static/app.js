@@ -35,7 +35,7 @@ $(document).ready(function() {
 		document.getElementById('getinfo').style.color = "white";
 		document.getElementById('info-bar').innerHTML = "the poetryscript project scans from among " +
 		"<a href='\https://www.gutenberg.org\'>gutenberg.org</a>'s 57,000 novels to produce randomly-generated 8-line poems that follow " + 
-		"conventional sonnet standards. <b>Each sonnet is unique and will never be recreated by you or anyone else.</b>";
+		"conventional sonnet standards. <b>Each sonnet is universally unique and will never be recreated by you or anyone else.</b>";
 		$("#info-bar").slideDown("slow");
 		firstTimeUser = true;
 		barIsShowing = true;
